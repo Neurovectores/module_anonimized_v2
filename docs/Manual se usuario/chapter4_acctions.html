@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 4">
+    <title>User Manual - Chapter 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 4: Core Actions in Neurovectors</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                Core actions like training and testing are executed within a project.
+                This chapter explains how to create a project, load a dataset, train a model, and run tests.
+            </p>
+        </section>
+
+        <section>
+            <h3>Create a Project and Load a Dataset</h3>
+            <p>Create a project and load a dataset:</p>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a new project
+project = Proyecto(titulo="Example Project", verbose=True)
+
+# Load a dataset into the project
+dataset = project.add_dataset(name="demo_dataset", file="data.csv")
+
+# Define study variables
+dataset.set_study(["column1", "column2"])
+</code></pre>
+            <p>The dataset is initialized, rows/columns are loaded, and study variables selected.</p>
+        </section>
+
+        <section>
+            <h3>Training</h3>
+            <p>The <code>train</code> method trains a model using a dataset and engine:</p>
+            <pre><code># Add an engine
+engine = project.add_engine(name="engine_demo", type="EngineDict")
+
+# Add analytics
+analytics = project.add_analytics(name="analytics_demo", type="Clas")
+
+# Train the model
+project.actions.train(
+    dataset=dataset,
+    engine=engine,
+    analytics=analytics,
+    epochs=5,
+    mode="success"
+)</code></pre>
+            <p>This uses 'success' mode, training only rows misclassified in previous epochs.</p>
+        </section>
+
+        <section>
+            <h3>Testing</h3>
+            <p>The <code>test</code> method evaluates the model with a dataset:</p>
+            <pre><code># Create a subset (optional)
+sample_train, sample_test = project.add_split(
+    name_part1="train", 
+    name_part2="test", 
+    rows=1000, 
+    percentage=80
+)
+
+# Test the model
+project.actions.test(
+    dataset=dataset,
+    engine=engine,
+    analytics=analytics,
+    filter_rows=sample_test
+)</code></pre>
+            <p>Here, test rows are defined using a previously created sample.</p>
+        </section>
+
+        <section>
+            <h3>End-to-End: Train and Test</h3>
+            <p>A full training/testing flow:</p>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a project
+project = Proyecto(titulo="End-to-End", verbose=True)
+
+# Load a dataset
+dataset = project.add_dataset(name="full_dataset", file="data.csv")
+dataset.set_study(["column1", "column2"])
+
+# Add engine and analytics
+engine = project.add_engine(name="full_engine", type="EngineDict")
+analytics = project.add_analytics(name="full_analytics", type="Clas")
+
+# Create train/test samples
+sample_train, sample_test = project.add_split(
+    name_part1="train", 
+    name_part2="test", 
+    rows=1000, 
+    percentage=80
+)
+
+# Train the model
+project.actions.train(
+    dataset=dataset,
+    engine=engine,
+    analytics=analytics,
+    filter_rows=sample_train,
+    epochs=10,
+    mode="all"
+)
+
+# Test the model
+project.actions.test(
+    dataset=dataset,
+    engine=engine,
+    analytics=analytics,
+    filter_rows=sample_test
+)
+
+# Show project information
+project.show_project()</code></pre>
+        </section>
+
+        <section>
+            <h3>Additional Details</h3>
+            <ul>
+                <li><code>train</code> may auto-stop when 100% accuracy is achieved.</li>
+                <li>Training modes ('success', 'all', 'group') adapt to different needs.</li>
+                <li>Testing can run on the full dataset or specific samples.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter3_datasets.html">◀ Previous</a>
+        |
+        <a href="chapter5_advance_engie.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Neurovectors">
+    <title>User Manual - Chapter 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 2: Project Structure and Basic Usage</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                This chapter shows how to create and structure a project in Neurovectors.
+                Projects have four core components: datasets, engines, samples, and analytics.
+                Below are the initial steps to work with a project.
+            </p>
+        </section>
+
+        <section>
+            <h3>Create a New Project</h3>
+            <p>Use the <code>Proyecto</code> class as follows:</p>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a project
+project = Proyecto(titulo="My Example Project", verbose=True)
+
+# Show general project info
+project.show_project()</code></pre>
+        </section>
+
+        <section>
+            <h3>Basic Project Structure</h3>
+            <p>A Neurovectors project consists of:</p>
+            <ul>
+                <li><strong>Datasets:</strong> Data files used for training and analytics.</li>
+                <li><strong>Engines:</strong> Components that perform predictions/calculations.</li>
+                <li><strong>Samples:</strong> Randomly selected subsets for training or testing.</li>
+                <li><strong>Analytics:</strong> Analysis and evaluation methods.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Manage Datasets</h3>
+            <p>Add and manage datasets:</p>
+            <pre><code># Add a new dataset
+dataset = project.add_dataset(name="sales_dataset", file="sales.csv")
+
+# Show dataset details
+dataset.show_dataset()
+
+# Drop a dataset
+project.drop_dataset(name="sales_dataset")</code></pre>
+        </section>
+
+        <section>
+            <h3>Manage Engines</h3>
+            <p>Engines process data and perform predictions:</p>
+            <pre><code># Add a new engine
+engine = project.add_engine(name="pred_engine", type="EngineDict")
+
+# Show engine info
+engine.show_info()
+
+# Drop an engine
+project.drop_engine(name="pred_engine")</code></pre>
+        </section>
+
+        <section>
+            <h3>Manage Samples</h3>
+            <p>Samples split data into random subsets:</p>
+            <pre><code># Create two samples
+sample1, sample2 = project.add_split(
+    name_part1="train", 
+    name_part2="test", 
+    rows=1000, 
+    percentage=80
+)
+
+# Show a sample
+print(project.get_split(name="train"))
+
+# Drop a sample
+project.drop_split(name="train")</code></pre>
+        </section>
+
+        <section>
+            <h3>Manage Analytics</h3>
+            <p>Analytics provide metrics and evaluations:</p>
+            <pre><code># Add an analytics
+analysis = project.add_analytics(name="hits_analysis", type="Clas", method="Hits")
+
+# Show analytics info
+analysis.show_info()
+
+# Drop analytics
+project.drop_analytics(name="hits_analysis")</code></pre>
+        </section>
+
+        <section>
+            <h3>Full Example</h3>
+            <p>A complete example to create and structure a project:</p>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a project
+project = Proyecto(titulo="Full Project", verbose=True)
+
+# Add a dataset
+dataset = project.add_dataset(name="demo_dataset", file="data.csv")
+
+# Add an engine
+engine = project.add_engine(name="demo_engine", type="EngineDict")
+
+# Create samples
+sample_train, sample_test = project.add_split(
+    name_part1="train", 
+    name_part2="test", 
+    rows=1000, 
+    percentage=80
+)
+
+# Add analytics
+analysis = project.add_analytics(name="demo_analysis", type="Clas", method="Hits")
+
+# Show general project info
+project.show_project()</code></pre>
+        </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter3_datasets.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

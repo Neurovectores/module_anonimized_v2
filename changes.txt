@@ -1,0 +1,101 @@
+# © 2025. Software anonimizado. Todos los derechos reservados.
+# All rights reserved. 
+# Anónimo
+2025-03-31
+    VERSIÓN 2.0.3:
+        - Ahora el modelo comparador de algoritmos quita las variables que se han excluido
+        - Nuevo método de análisis de inlfuencia de variables en las acciones.
+        
+2025-01-10
+    VERSIÓN 2.0.2:
+        - Añadido dos nuevos métodos de elección del candidato
+
+2024-12-09
+    VERSIÓN 2.0.1:
+        - Nuevo ejemplo Absentismo.
+        - Nuevo método en el dataset para poner las columnas a excluir
+        - Nueve método para sacar las columnnas que procesaremos excluidas las que están marcadas
+        - Cambio en el método process del dataset para que solo procese las columnas incluidas
+        - Ordenación de examples para poder hacer más pruebas
+
+2024-12-03
+    VERSIÓN 2.0.0:
+        - Corregido problema con dataset que tienen string en vez de datos numéricos como salida
+        - Incluido nuevo objeto Colum para manejar las columnas del dataset
+        - Incorporado el dataset del Cancer
+
+2024-11-27
+    VERSIÓN 1.0.9:
+        - Modificado sistema de filas a procesar. Ahora indica la cantidad no la fila final
+        - Nueva clase para pintar un neurovectores en un browser de internet, añadido paquete pyvis
+        - Corrección de errores en la recogida de la telemetría en los vectores y Axones
+        - Correción en la variable de salida, para que coja la telemetría
+        - Nuevos métodos en el motor para mostrar los nodos y neurovectores
+        - Ahora se puede exportar en Json el fichero de mapa de métodos e importarlo cuando se necesite.
+        - Nueva opción en el entrenamiento que permite convetir incluso la fila si se ha tenido éxito o no.
+        - Nueva opción en el entrenamiento que permite agrupar los nodos en el neruovector en vez de crear uno nuevo: Experimental!!
+        
+ 
+2024-11-25
+    VERSIÓN 1.0.8:
+        - Correción en el método Avg_Predict, no se tenia en cuenta el valor inicial para la media
+        - Actualización del método Avg_Predict, ahora el valor inicial se multiplica por el scope mas un factor de Correción
+        de 1.1 en los pesos para la media ponderada.
+        - Ahora se puede pasar el mapa de métodos para que los tenga en cuenta en la decisión del método más idóneo
+        - Se incorpora varias certezas, La certeza absoluta y la certeza relativa. La absoluta es la del  máximo cándidato
+        y la relativa es la que tiene cada candidato.
+        - Se crea una nueva utilidad para pintar en pantalla los neurovectores, todavía en fase Beta.
+        
+
+2024-11-24
+    VERSIÓN 1.0.7:
+        - Nuevo modelo de KPIS en nodos, vectores y neurovectores.
+        - Simplificado el modelo de Engine
+        - Añadido Tabulate para manerjar la salidas en pantalla
+        - Añadido pandasgui para manejar los dataframe
+        - Modificado el sistema de métodos
+
+2024-11-05
+    VERSIÓN 1.0.6:
+        - Nuevo modelo en el motor de neurovectores, ahora se usan objetos dentro del diccionarios
+        para facilitar y simplificar el código
+
+2024-10-29
+    VESIÓN 1.0.5:
+        - Nueva clase que permite hacer comparativas con otros algoritmos
+        - Simplificación de la llamada del dataset
+
+2024-10-28
+    VERSIÓN 1.0.4:
+        - Nueva función map_mode que mapea el modo de funcionamiento del dataset, ahora cada acción puede ejecutar
+        el proceso de manera independiente de como esté establecido en la variable globar self.mode
+        - Nueva función de entrenamiento
+        - Corregido problemas con el clasificador cuando no hay resultado
+        - Implementado entrenamiento sencillo, sin exito
+        - Corregido distintos problemas
+        - Implementado recogida de datos de uso de los nodos
+        - Nuevo añadido para gestionar las muestras aleatorias. Ahora no depende del dataset.
+
+2024-10-22
+    VERSIÓN 1.0.3:
+        - Añadido "Analytics" se independiza la manera de calcular el resultado
+        - Corregido fallo en tokenizer cuando hay variables no tokenizadas
+        - Añadida función de "mode" en el dataset para poder usar la parte aleatorio
+        - Creada función de procesamiento del dataset para simplificar el código y no repertirlo en las acciones.
+
+2024-10-18
+    VERSIÓN 1.0.2:
+        - Añadida dependencia psutil al setup
+        - Creado manual de uso de clase Proyect,Datasets,Actions
+        - Añadida nuevo modelo "Collectors" que permite recoger los resultados y hacer las estadísticas
+        
+        
+2024-10-17
+    VERSIÓN 1.0.1:
+        - Se definen el modelo de engines
+        - Se crea la capa "Actions" que permite interactuar con los engines
+        - Se crea la capa "Engine" como modelo de métodos para los distintos engines
+
+2024-10-10
+    VERSIÓN 1.0.0:
+        - Versión inicial con la gestión de los datasets y la estructura básica

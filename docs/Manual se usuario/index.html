@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Neurovectors">
+    <title>User Manual - Neurovectors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <p><strong>Version:</strong> 1.0.9</p>
+        <p><strong>Date:</strong> 2024-11-27</p>
+    <p><strong>Author:</strong> Anonymous</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Contents</h2>
+            <ul>
+                <li><a href="chapter2_introducction.html">Chapter 2: Project Structure and Basic Usage</a></li>
+                <li><a href="chapter3_datasets.html">Chapter 3: Datasets</a></li>
+                <li><a href="chapter4_acctions.html">Chapter 4: Actions and Flow</a></li>
+                <li><a href="chapter5_advance_engie.html">Chapter 5: Advanced Engine Usage</a></li>
+                <li><a href="chapter6_tokenizer.html">Chapter 6: Tokenizer</a></li>
+                <li><a href="chapter7_neurovector.html">Chapter 7: Neurovector</a></li>
+                <li><a href="chapter8_Analytics.html">Chapter 8: Multivariable Analytics</a></li>
+                <li><a href="chapter9_Methods.html">Chapter 9: Candidate Calculation Methods</a></li>
+                <li><a href="chapter10_reflexion.html">Chapter 10: Reflections</a></li>
+            </ul>
+        </section>
+        <h2>Chapter 1: Introduction and Project Setup</h2>
+        <section>
+            <h3>Overview</h3>
+            <p>
+                Neurovectors is a toolkit for managing predictive projects. 
+                It provides advanced functionality to manipulate datasets, prediction engines, and analytics, 
+                as well as tools to inspect overall project information and estimate memory usage.
+            </p>
+        </section>
+
+        <section>
+            <h3>Main Features</h3>
+            <ul>
+                <li>Dataset management: add, drop, explore, and analyze data.</li>
+                <li>Creation and configuration of prediction engines.</li>
+                <li>Custom analytics per study variable.</li>
+                <li>Data splitting into random samples.</li>
+                <li>Project memory footprint monitoring.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Python 3.8 or higher.</li>
+                <li>Dependencies:</li>
+                <pre><code>pandas
+scikit-learn
+tqdm
+babel
+numpy
+psutil
+pandasgui
+matplotlib
+networkx
+pyvis</code></pre>
+                <li>Install dependencies:</li>
+                <pre><code>pip install pandas scikit-learn tqdm babel numpy psutil pandasgui matplotlib networkx pyvis</code></pre>
+                <li>Optional: a project file with <code>.pkl</code> extension to load an existing project.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Create a New Project</h3>
+            <p>Use the <code>Proyecto</code> class to start a new project:</p>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a new project
+project = Proyecto(titulo='My Test Project', verbose=True)
+
+# Show project information
+project.show_project()</code></pre>
+        </section>
+
+        <section>
+            <h3>Internal Structure</h3>
+            <p>The project is managed through two main classes:</p>
+            <ul>
+                <li><strong>O_Proyecto:</strong> Defines base configuration such as title, version, and seed.</li>
+                <li><strong>Proyecto:</strong> Orchestrates project lifecycle, including loading/saving and interaction with datasets and engines.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+    <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

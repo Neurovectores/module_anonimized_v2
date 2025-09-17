@@ -1,0 +1,49 @@
+{
+    "map": [
+        {
+            "Certeza (%)": 0,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 10,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 20,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 30,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 40,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 50,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 60,
+            "Mejor Metodo": "Hits"
+        },
+        {
+            "Certeza (%)": 70,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 80,
+            "Mejor Metodo": "Hits"
+        },
+        {
+            "Certeza (%)": 90,
+            "Mejor Metodo": "Hits"
+        },
+        {
+            "Certeza (%)": 100,
+            "Mejor Metodo": "Hits"
+        }
+    ],
+    "var": "_quality"
+}

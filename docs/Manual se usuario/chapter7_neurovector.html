@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 7">
+    <title>User Manual - Chapter 7</title>
+    <style>
+        .node {
+            font-size: 12px;
+            text-anchor: middle;
+            fill: white;
+        }
+        .circle {
+            stroke: #000;
+            stroke-width: 1;
+        }
+        .relation {
+            stroke: #555;
+            stroke-width: 2;
+        }
+        .certainty {
+            font-size: 10px;
+            fill: black;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 7: Neurovector Structure</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                A <strong>neurovector</strong> represents a dataset row and contains structured information in axons, nodes, and vectors.
+                These elements are interconnected and used to store telemetry, compute metrics, and perform predictions.
+                This chapter explains their relationships and the key properties of a neurovector.
+            </p>
+        </section>
+
+        <section>
+            <h3>Main Relationships</h3>
+            <p>The main relationships in a neurovector are:</p>
+            <ul>
+                <li><strong>Neurovector:</strong> Corresponds to a dataset row.</li>
+                <li><strong>Axons:</strong> Represent dataset columns.</li>
+                <li><strong>Vectors:</strong> Connect an axon to a node.</li>
+                <li><strong>Nodes:</strong> Represent specific column values and their numeric/categorical nature.</li>
+            </ul>
+            <p>Each element stores telemetry such as usage, energy, success, errors (MAE and RMSE), and residual counts.</p>
+        </section>
+
+        <section>
+            <h3>Neurovector Properties</h3>
+            <p>Key properties include:</p>
+            <ul>
+                <li><strong>Identifier:</strong> Unique neurovector ID.</li>
+                <li><strong>Axons:</strong> Map each dataset column to its nodes and vectors.</li>
+                <li><strong>Nodes:</strong> Set of nodes connected to the neurovector.</li>
+                <li><strong>Telemetry:</strong> Metrics like total energy, accumulated success, and usage.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Component Telemetry</h3>
+            <p>All elements (neurovectors, axons, nodes, vectors) include telemetry for analysis and optimization:</p>
+            <ul>
+                <li><strong>Accumulated use:</strong> How many times it was used.</li>
+                <li><strong>Accumulated success:</strong> Number of successful predictions.</li>
+                <li><strong>Energy:</strong> Value indicating component relevance.</li>
+                <li><strong>Errors:</strong> MAE and RMSE.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Relationship Diagram</h3>
+            <p>The following diagram illustrates neurovector component relationships:</p>
+        </section>
+        <section>
+            <h3>Main Relationships</h3>
+            <p>The interactive diagram shows relationships between neurovector, axons, nodes, and vectors:</p>
+            <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Neurovector -->
+                <circle cx="400" cy="100" r="40" class="circle" fill="#4CAF50"/>
+                <text x="400" y="105" class="node">Neurovector</text>
+                <text x="400" y="130" class="certainty">Certainty: 85%</text>
+                
+                <!-- Axons -->
+                <line x1="400" y1="140" x2="300" y2="250" class="relation"/>
+                <line x1="400" y1="140" x2="500" y2="250" class="relation"/>
+                <circle cx="300" cy="250" r="30" class="circle" fill="#FF9800"/>
+                <circle cx="500" cy="250" r="30" class="circle" fill="#FF9800"/>
+                <text x="300" y="255" class="node">Axon 1</text>
+                <text x="500" y="255" class="node">Axon 2</text>
+
+                <!-- Vectors -->
+                <line x1="300" y1="280" x2="200" y2="350" class="relation"/>
+                <line x1="300" y1="280" x2="300" y2="350" class="relation"/>
+                <line x1="500" y1="280" x2="450" y2="350" class="relation"/>
+                <line x1="500" y1="280" x2="550" y2="350" class="relation"/>
+                <circle cx="200" cy="350" r="20" class="circle" fill="#03A9F4"/>
+                <circle cx="300" cy="350" r="20" class="circle" fill="#03A9F4"/>
+                <circle cx="450" cy="350" r="20" class="circle" fill="#03A9F4"/>
+                <circle cx="550" cy="350" r="20" class="circle" fill="#03A9F4"/>
+                <text x="200" y="355" class="node">Vector 1</text>
+                <text x="300" y="355" class="node">Vector 2</text>
+                <text x="450" y="355" class="node">Vector 3</text>
+                <text x="550" y="355" class="node">Vector 4</text>
+
+                <!-- Nodes -->
+                <line x1="200" y1="370" x2="200" y2="450" class="relation"/>
+                <line x1="300" y1="370" x2="300" y2="450" class="relation"/>
+                <line x1="450" y1="370" x2="450" y2="450" class="relation"/>
+                <line x1="550" y1="370" x2="550" y2="450" class="relation"/>
+                <circle cx="200" cy="450" r="15" class="circle" fill="#E91E63"/>
+                <circle cx="300" cy="450" r="15" class="circle" fill="#E91E63"/>
+                <circle cx="450" cy="450" r="15" class="circle" fill="#E91E63"/>
+                <circle cx="550" cy="450" r="15" class="circle" fill="#E91E63"/>
+                <text x="200" y="455" class="node">Node 1</text>
+                <text x="300" y="455" class="node">Node 2</text>
+                <text x="450" y="455" class="node">Node 3</text>
+                <text x="550" y="455" class="node">Node 4</text>
+            </svg>
+            <p>The diagram shows:</p>
+            <ul>
+                <li>A <strong>neurovector</strong> as the structure root.</li>
+                <li>Connections to <strong>axons</strong> representing dataset columns.</li>
+                <li>Each axon connects to <strong>vectors</strong> which link to nodes.</li>
+                <li><strong>Nodes</strong> contain column values.</li>
+                <li><strong>Certainty</strong> is the confidence level for predictions.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Certainty</h3>
+            <p>
+                Certainty is the percentage of understood stimulus used in prediction.
+                It is stored at neurovector level and is key for prediction quality.
+            </p>
+            <pre><code># Certainty calculation example
+certainty = neurovector.nodes_comprendidos / neurovector.total_nodos * 100
+print(f"Certainty: {certainty}%")</code></pre>
+        </section>
+        <section>
+            <h3>Diving into the Axon</h3>
+            <p>
+                An <strong>axon</strong> is a channel in the neurovector connecting a dataset column to its vectors and nodes.
+                It encapsulates the relationship between column positions and derived values.
+            </p>
+        
+            <h4>Essential Axon Properties</h4>
+            <ul>
+                <li><strong>Column:</strong> The dataset index/column represented.</li>
+                <li><strong>Nodes:</strong> Set of nodes associated to the axon.</li>
+                <li><strong>Vectors:</strong> Set of vectors linking the axon to nodes.</li>
+                <li><strong>Telemetry:</strong> KPIs like use, success, energy, MAE, RMSE.</li>
+                <li><strong>Input Use:</strong> When the axon contributes to stimulus propagation.</li>
+                <li><strong>Output Use:</strong> When the axon reaches a study variable.</li>
+            </ul>
+        
+            <h4>Dual Use: Input and Output</h4>
+            <p>
+                An axon can play a double role depending on context:
+            </p>
+            <ul>
+                <li>
+                    <strong>Input:</strong>
+                    Nodes and vectors associated to the axon are used to process and propagate the stimulus.
+                </li>
+                <li>
+                    <strong>Output:</strong>
+                    When the axon reaches a study variable, its output metrics (<code>acc_output</code>) increase, reflecting its direct impact.
+                </li>
+            </ul>
+        
+            <h4>Telemetry Calculation</h4>
+            <p>
+                The axon accumulates use, success, energy, and errors during interactions.
+                A specialized method updates the axon's KPIs:
+            </p>
+            <pre><code># KPI calculation example
+        axon.cal(
+            mae=0.05,
+            mse=0.0025,
+            success=True,
+            output=True
+        )</code></pre>
+        
+            <h4>Telemetry Visualization</h4>
+            <p>
+                Accumulated values can be interpreted as performance indicators:
+            </p>
+            <ul>
+                <li><strong>Accumulated Use:</strong> <code>acc_use</code>.</li>
+                <li><strong>Success:</strong> <code>acc_successes</code>.</li>
+                <li><strong>Errors:</strong> MAE and RMSE.</li>
+                <li><strong>Energy:</strong> Relative efficiency indicator.</li>
+            </ul>
+        
+            <h4>Axon Metrics Example</h4>
+            <p>Example of axon KPIs:</p>
+            <pre><code>Axon: Column 'age'
+        - Use: 10
+        - Success: 8
+        - MAE: 0.04
+        - RMSE: 0.06
+        - Energy: 0.80
+        - Output Use: 3
+        - Residues: 2</code></pre>
+        </section>
+        <section>
+            <h2>Diving into the Vector</h2>
+            <p>
+                A <strong>vector</strong> defines the direct relation between a node and the neurovector through an axon.
+                Vectors encapsulate key performance metrics essential to evaluate their impact in prediction.
+            </p>
+        
+            <h3>Essential Vector Properties</h3>
+            <ul>
+                <li><strong>Accumulated Use (<code>acc_use</code>):</strong> Times the vector was used.</li>
+                <li><strong>Accumulated Success (<code>acc_successes</code>):</strong> Successful outcomes.</li>
+                <li><strong>Errors:</strong> MAE, MSE, RMSE.</li>
+                <li><strong>Energy (<code>energy</code>):</strong> Success-to-use ratio.</li>
+                <li><strong>Residue (<code>acc_residue</code>):</strong> Times considered residue.</li>
+                <li><strong>Output (<code>acc_output</code>):</strong> Times used as output.</li>
+                <li><strong>Axon:</strong> Parent axon identifier.</li>
+                <li><strong>Name:</strong> Built from axon id and node.</li>
+            </ul>
+        
+            <h3>Telemetry Calculation</h3>
+            <p>Vectors update metrics using a specialized method:</p>
+            <pre><code># Vector KPI calculation
+        vector.cal(
+            mae=0.02,
+            mse=0.0004,
+            success=True,
+            output=True
+        )</code></pre>
+            <p>
+                Este método actualiza el uso acumulado, éxito, energía, y errores del vector, reflejando su contribución al proceso de predicción.
+            </p>
+        
+            <h3>Metrics Visualization</h3>
+            <p>Vectors can display their main metrics with <code>show</code>:</p>
+            <pre><code># Visualization example
+        vector.show()
+        # Expected output:
+        # ->Vector (Axon1-Node2): Use: 10, Successes: 8, Energy: 0.80, Residue: 2, MAE: 0.03, MSE: 0.0009
+        </code></pre>
+        
+            <h3>Vector Example</h3>
+            <p>Example of accumulated vector metrics:</p>
+            <pre><code>Vector: Axon1-Node2
+        - Uso: 15
+        - Éxito: 12
+        - Energía: 0.80
+        - Residuo: 3
+        - MAE: 0.02
+        - MSE: 0.0004
+        - RMSE: 0.02
+        </code></pre>
+        </section>
+        <section>
+            <h2>Node Description</h2>
+            <p>
+                A <strong>node</strong> is a fundamental component representing a specific column value.
+                Nodes are key in propagation and prediction, storing success, error, and energy metrics.
+            </p>
+        
+            <h3>Essential Node Properties</h3>
+            <ul>
+                <li><strong>Column (<code>column</code>):</strong> Dataset column associated with the node.</li>
+                <li><strong>Value (<code>value</code>):</strong> Node's specific value.</li>
+                <li><strong>Identifier (<code>id</code>):</strong> Unique node ID.</li>
+                <li><strong>Name (<code>name</code>):</strong> Built from column and value literal.</li>
+                <li><strong>Is numeric (<code>numeric</code>):</strong> Whether the node value is numeric.</li>
+                <li><strong>Related neurovectors (<code>nvs</code>):</strong> Set of neurovectors where the node appears.</li>
+            </ul>
+        
+            <h3>Telemetry Metrics</h3>
+            <p>Nodes accumulate key metrics during their interactions:</p>
+            <ul>
+                <li><strong>Accumulated use (<code>acc_use</code>):</strong> Times used.</li>
+                <li><strong>Accumulated success (<code>acc_successes</code>):</strong> Number of successes.</li>
+                <li><strong>Errors:</strong> MAE, MSE, RMSE.</li>
+                <li><strong>Energy (<code>energy</code>):</strong> Success-to-use ratio.</li>
+                <li><strong>Residue (<code>acc_residue</code>):</strong> Times receiving residual energy.</li>
+            </ul>
+        
+            <h3>Telemetry Calculation</h3>
+            <p>Nodes update metrics using <code>cal</code>:</p>
+            <pre><code># Node metrics calculation example
+        node.cal(
+            mae=0.05,
+            mse=0.0025,
+            success=True,
+            is_var=False
+        )</code></pre>
+            <p>
+                Este método actualiza los valores acumulados de uso, éxito y métricas de error, reflejando el desempeño del nodo en la propagación.
+            </p>
+        
+            <h3>Metrics Visualization</h3>
+            <p>Use <code>show</code> to view node performance:</p>
+            <pre><code># Node visualization example
+        node.show()
+        # Expected output:
+        # -- Node (1): age 25 (Number: True), Use: 15, Successes: 12, Energy: 0.80, Residue: 3, MAE: 0.02, MSE: 0.0004
+        </code></pre>
+        
+            <h3>Node Example</h3>
+            <p>Example of accumulated node metrics:</p>
+            <pre><code>Nodo: edad 25
+        - Uso: 15
+        - Éxito: 12
+        - Energía: 0.80
+        - Residuo: 3
+        - MAE: 0.02
+        - MSE: 0.0004
+        - RMSE: 0.02
+        </code></pre>
+        </section>
+        <section>
+            <h2>The Importance of Related Neurovectors Set</h2>
+            <p>
+                Each node relates to a set of neurovectors via connections. This set is key to compute stimulus propagation and determine relevant candidates.
+                Using Python tools like <code>set</code> and <code>Counter</code>, we can efficiently identify patterns and compute metrics.
+            </p>
+        
+            <h3>Associated Neurovectors</h3>
+            <p>Associated neurovectors are stored in a <code>set</code>, enabling efficient operations:</p>
+            <ul>
+                <li><strong>Intersection:</strong> To find stimulated nodes (<code>hits</code>).</li>
+                <li><strong>Union:</strong> To combine node sets.</li>
+                <li><strong>Difference:</strong> To identify residual nodes.</li>
+            </ul>
+            <pre><code># Set operations example
+        stim_nodes = {node1, node2, node3}
+        nv_nodes = {node2, node3, node4}
+        
+        # Intersection: hits
+        hits_nodes = stim_nodes & nv_nodes
+        
+        # Difference: residue
+        residue_nodes = nv_nodes - stim_nodes</code></pre>
+        
+            <h3>Using Python's <code>Counter</code></h3>
+            <p>
+                <code>Counter</code> helps count hits across related neurovectors. From all stimulated nodes' related neurovectors, we identify the most-hit ones, crucial to select candidates within the <code>scope</code>.
+            </p>
+            <pre><code># Counter example
+        from collections import Counter
+        
+        neurovectors = [nv1, nv2, nv1, nv3, nv2, nv1]
+        
+        # Count hits
+        nv_counter = Counter(neurovectors)
+        
+        # Most relevant within scope (e.g., top 3)
+        scope = 3
+        top_neurovectors = nv_counter.most_common(scope)
+        print(top_neurovectors)
+        # Expected: [(nv1, 3), (nv2, 2), (nv3, 1)]
+        </code></pre>
+        
+            <h3>Node/Neurovector Interactions</h3>
+            <p>Sets and <code>Counter</code> enable advanced analysis for stimulated, found, and residual nodes:</p>
+            <ul>
+                <li><strong>Hits:</strong> NV nodes present in the stimulus.</li>
+                <li><strong>Finds:</strong> Stimulus nodes present in the NV.</li>
+                <li><strong>Residue:</strong> NV nodes not reached that may include the study variable.</li>
+            </ul>
+            <pre><code># Node analysis
+        stim_nodes = {node1, node2, node3}
+        nv_nodes = {node2, node3, node4}
+        
+        # Hits
+        hits_nodes = stim_nodes & nv_nodes
+        
+        # Residue
+        residue_nodes = nv_nodes - stim_nodes
+        
+        # Finds
+        found_nodes = stim_nodes & nv_nodes
+        
+        print(f"Hits: {hits_nodes}")
+        print(f"Residue: {residue_nodes}")
+        print(f"Found: {found_nodes}")
+        </code></pre>
+        
+            <h3>Candidate Selection</h3>
+            <p>
+                Most relevant neurovectors within <code>scope</code> are selected by hit counts.
+                For each candidate, residue is analyzed to identify the study variable and predict.
+            </p>
+            <pre><code># Candidate selection within scope
+        top_neurovectors = nv_counter.most_common(scope)
+        
+        for nv, hits in top_neurovectors:
+            residue = nv_nodes - hits_nodes
+            print(f"Neurovector: {nv}, Hits: {hits}, Residue: {residue}")
+        </code></pre>
+        </section>
+                                
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter6_tokenizer.html">◀ Previous</a>
+        |
+        <a href="chapter8_Analytics.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

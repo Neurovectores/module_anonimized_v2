@@ -1,0 +1,10 @@
+pandas
+scikit-learn
+tqdm
+babel
+numpy
+psutil
+pandasgui
+matplotlib
+networkx
+pyvis

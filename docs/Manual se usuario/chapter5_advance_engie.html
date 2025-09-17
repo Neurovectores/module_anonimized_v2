@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 5">
+    <title>User Manual - Chapter 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 5: Advanced Engine Usage</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                The <code>Engine</code> is a core component using dicts and sets to manage nodes, neurovectors, and their connections.
+                This chapter covers engine usage, its interactions with <code>Actions</code> and <code>Dataset</code>, and how training/predictions work.
+            </p>
+        </section>
+
+        <section>
+            <h3>Basic Engine Interaction</h3>
+            <p>The engine is managed from a <code>Proyecto</code> and used via <code>Actions</code>. Typical flow:</p>
+            <ol>
+                <li>Create a project and dataset.</li>
+                <li>Add an engine to the project.</li>
+                <li>Convert dataset rows to neurovectors.</li>
+                <li>Train the engine.</li>
+                <li>Predict and test.</li>
+            </ol>
+            <pre><code>from neurovectors import Proyecto
+
+# Create a project
+project = Proyecto(titulo="Engine Usage", verbose=True)
+
+# Load a dataset
+dataset = project.add_dataset(name="engine_dataset", file="data.csv")
+dataset.set_study(["column1", "column2"])
+
+# Add an engine
+engine = project.add_engine(name="main_engine", type="EngineDict")
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Convert Rows to Neurovectors</h3>
+            <p>Conversion is done via engine's <code>conver_row</code> method:</p>
+            <pre><code># Convert rows to neurovectors
+total_rows = project.actions.convert(dataset=dataset, engine=engine)</code></pre>
+            <p>This creates nodes and neurovectors from dataset data, connecting columns to values.</p>
+        </section>
+
+        <section>
+            <h3>Engine Training</h3>
+            <p>Training uses <code>Actions.train</code> which interacts with the engine:</p>
+            <pre><code># Train the engine
+project.actions.train(
+    dataset=dataset,
+    engine=engine,
+    analytics=project.add_analytics(name="engine_analysis", type="Clas"),
+    epochs=5,
+    mode="success"
+)</code></pre>
+            <p>During training, neurovectors, scope, and results are analyzed to adjust the model.</p>
+        </section>
+
+        <section>
+            <h3>Predictions</h3>
+            <p>The engine predicts by finding the most similar neurovectors to the stimulus:</p>
+            <pre><code># Make a prediction
+result = engine.predict(
+    analitycs=project.actions.analytics,
+    stimulus={"column1": "value1", "column2": "value2"},
+    scope=1
+)</code></pre>
+            <p>The stimulus can be a dict, pandas Series, or formatted string.</p>
+        </section>
+
+        <section>
+            <h3>Helper Methods</h3>
+            <p>The engine includes methods to inspect and manage neurovectors:</p>
+            <ul>
+                <li><strong>Show info:</strong></li>
+                <pre><code># Show engine info
+engine.show_info()</code></pre>
+
+                <li><strong>Show all data:</strong></li>
+                <pre><code># Show all data in pandasgui
+engine.show_all()</code></pre>
+
+                <li><strong>Graph a neurovector:</strong></li>
+                <pre><code># Draw a specific neurovector
+engine.paint_nv(nv=0)</code></pre>
+
+                <li><strong>Save/Load engine state:</strong></li>
+                <pre><code># Save engine state
+engine.save("engine_state.pkl")
+
+# Load engine state
+engine.load("engine_state.pkl")</code></pre>
+            </ul>
+        </section>
+
+        <section>
+            <h3>End-to-End Flow</h3>
+            <p>Combining conversion, training, and predictions:</p>
+            <pre><code># Create a project and engine
+project = Proyecto(titulo="End-to-End", verbose=True)
+dataset = project.add_dataset(name="full_dataset", file="data.csv")
+dataset.set_study(["column1", "column2"])
+engine = project.add_engine(name="full_engine", type="EngineDict")
+
+# Convert rows to neurovectors
+project.actions.convert(dataset=dataset, engine=engine)
+
+# Train engine
+project.actions.train(
+    dataset=dataset,
+    engine=engine,
+    analytics=project.add_analytics(name="full_analysis", type="Clas"),
+    epochs=10,
+    mode="all"
+)
+
+# Run predictions/tests
+project.actions.test(
+    dataset=dataset,
+    engine=engine,
+    analytics=project.add_analytics(name="full_analysis", type="Clas")
+)
+
+# Inspect engine
+engine.show_info()
+engine.paint_nv(nv=0)</code></pre>
+        </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter4_acctions.html">◀ Previous</a>
+        |
+        <a href="chapter6_tokenizer.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

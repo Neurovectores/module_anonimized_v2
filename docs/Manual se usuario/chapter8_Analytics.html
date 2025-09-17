@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 8">
+    <title>User Manual - Chapter 8: Multivariable Analytics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 8: Multivariable Analytics</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                This chapter dives into multivariable analysis using the <code>Analytics</code> class.
+                Study variables are managed independently, enabling tailored methods and metrics per variable.
+            </p>
+            <p>
+                Each variable has a dedicated workspace managed by <code>Output</code>, collecting metrics like
+                <strong>success</strong>, <strong>accuracy</strong>, <strong>MAE</strong>, and <strong>RMSE</strong> and running methods
+                to evaluate performance.
+            </p>
+        </section>
+
+        <section>
+            <h3>Per-Variable Workspaces</h3>
+            <p>Each variable in <code>Analytics</code> has an independent workspace initialized by <code>Output</code>, enabling:</p>
+            <ul>
+                <li>Compute variable-specific metrics.</li>
+                <li>Compare results across methods.</li>
+                <li>Configure a method map to optimize analysis by certainty.</li>
+            </ul>
+            <p>This is essential in multivariable systems where each variable differs.</p>
+        </section>
+
+        <section>
+            <h3>Initializing <code>Output</code></h3>
+            <p><code>Output</code> requires:</p>
+            <ul>
+                <li><strong>List of methods:</strong> Available methods for analysis.</li>
+                <li><strong>Variable name:</strong> Name of the associated variable.</li>
+                <li><strong>Selected method:</strong> Primary method to assess success.</li>
+                <li><strong>Scope:</strong> Number of levels considered.</li>
+                <li><strong>Method map:</strong> Optional, select method dynamically by certainty.</li>
+            </ul>
+            <pre><code># Create a workspace for a variable
+output = Output(
+    list_methods=["Hits", "Avg_predict", "Vectors_Energy"],
+    name_var="Variable1",
+    sel_method="Hits",
+    scope=3,
+    map={"Certainty (%)": "Hits"}
+)</code></pre>
+            <p>The method map adjusts the analysis method based on certainty to optimize results dynamically.</p>
+        </section>
+
+        <section>
+            <h3>Candidate Management</h3>
+            <p>Each engine-generated <code>Candidate</code> is evaluated within its variable's workspace.
+            <code>Output</code> processes candidates and updates each method's metrics.</p>
+            <pre><code># Add a candidate to analysis
+output.new_candidate(reset=True, candidate=my_candidate)</code></pre>
+            <p>This design shows each candidate's contribution to overall success and metrics.</p>
+        </section>
+
+        <section>
+            <h3>Prediction Calculation</h3>
+            <p>
+                Prediction evaluates all available methods to determine the most accurate outcome.
+                If a method map is provided, it selects the best method based on certainty.
+            </p>
+            <pre><code># Compute prediction for a row
+result = output.cal_prediction(mode=True, index_row=1)</code></pre>
+            <p>This updates global variable metrics and stores detailed prediction results.</p>
+        </section>
+
+        <section>
+            <h3>Exporting and Importing Results</h3>
+            <p>
+                <code>Output</code> exports detailed results as tables and certainty curves, enabling easy analysis and comparisons.
+            </p>
+            <pre><code># Export results
+output.get_results(sel_method="Hits")
+
+# Show accuracy curves
+output.show_curves(sel_method="Hits")</code></pre>
+            <p>Generate a method map to identify the best approach per certainty level:</p>
+            <pre><code># Generate and export method map
+method_map, weighted_mean = output.runner_curves(verbose=True)
+output.get_best_method(sel_var="Variable1", export_json="best_method.json")</code></pre>
+        </section>
+
+        <section>
+            <h3>Method Maps and Optimization</h3>
+            <p>Method maps adjust analysis dynamically by certainty, ensuring the best method per scenario.</p>
+            <p>They compare accuracy for each method across certainty levels, selecting the most suitable one.</p>
+        </section>
+
+        <section>
+            <h3>Summary</h3>
+            <p>
+                <code>Analytics</code> combined with <code>Output</code> enables optimized multivariable analysis.
+                Each variable runs in its own workspace, ensuring accurate, tailored results.
+            </p>
+        </section>
+        <section id="method-description">
+            <h2>Computation Methods in <code>Method</code></h2>
+            <p>
+                <code>Method</code> is the computation core inside <code>Output</code> analysis.
+                It manages accumulated telemetry per method, orchestrates candidate evaluation, computes accuracy, RMSE and MAE, and generates certainty curves.
+            </p>
+        
+            <h3>Interaction with <code>Output</code></h3>
+            <p>
+                Each <code>Output</code> instance contains multiple <code>Method</code> instances, one per name in <code>list_methods</code>, enabling parallel comparisons.
+            </p>
+        
+            <pre><code># Example: creating methods in Output
+        self.methods = {name_method: Method(name=name_method, scope=self.scope) for name_method in self.list_methods}</code></pre>
+        
+            <h3><code>Method</code> Responsibilities</h3>
+            <ul>
+                <li>Accumulate metrics like MSE, MAE, use and success across predictions.</li>
+                <li>Evaluate candidates and determine improvements over current best.</li>
+                <li>Collect key metrics after each prediction.</li>
+                <li>Compute certainty and accuracy curves from accumulated data.</li>
+            </ul>
+        
+            <h3>Calculated Metrics</h3>
+            <p>Calculations include:</p>
+            <ul>
+                <li><strong>Accuracy:</strong> Successes over total uses.</li>
+                <li><strong>MAE and RMSE:</strong> Accumulated absolute and squared errors.</li>
+                <li><strong>Certainty curve:</strong> Relationship between candidate certainty and accuracy.</li>
+            </ul>
+        
+            <h3>Certainty Curves</h3>
+            <p>
+                The class generates plots showing accuracy and data volume by certainty using <code>show_curve</code> and libraries like <code>matplotlib</code>.
+            </p>
+        
+            <pre><code># Example: certainty curves
+        method.show_curve()</code></pre>
+        
+            <h3>Code Example</h3>
+            <p>Example of <code>Method</code> managing a candidate, collecting KPIs, and updating metrics:</p>
+            <pre><code># Evaluate a candidate
+        method.add_candidate(reset=True, candidate=my_candidate)
+        
+        # Collect key metrics
+        result = method.recolet_kpis(mode=True, index_row=0)
+        
+        # Compute global metrics
+        method.calculate()</code></pre>
+        
+            <p>These capabilities make <code>Method</code> a powerful tool to implement and test multiple computation strategies.</p>
+        </section>
+        
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter7_neurovector.html">◀ Previous</a>
+        |
+        <a href="chapter9_Methods.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

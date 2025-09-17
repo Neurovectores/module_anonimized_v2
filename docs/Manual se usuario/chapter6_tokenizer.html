@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 6">
+    <title>User Manual - Chapter 6</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 6: Tokenization and Propagation in Neurovectors</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                Tokenization and propagation identify stimulated nodes from a stimulus, compute relevant neurovectors, and generate prediction candidates.
+                This chapter explains how <code>Tokenizer</code> works with the <code>Engine</code>, and how <code>Candidate</code> stores scope telemetry.
+            </p>
+        </section>
+
+        <section>
+            <h3>Role of <code>Tokenizer</code></h3>
+            <p>The <code>Tokenizer</code> processes a stimulus to determine:</p>
+            <ul>
+                <li>Stimulated nodes (<code>find_nodes</code>).</li>
+                <li>Found variables (<code>find_vars</code>).</li>
+                <li>Knowledge about the stimulus (<code>knowledge</code>).</li>
+                <li>Most relevant neurovectors (<code>count_neurovectors</code>).</li>
+            </ul>
+            <pre><code># Create a Tokenizer
+tokenizer = Tokenizer(dic_nodes=engine.nodes, stimulus=my_stimulus, vars=my_vars, scope=5)</code></pre>
+        </section>
+
+        <section>
+            <h3>Generating Candidates with <code>Candidate</code></h3>
+            <p>The engine uses <code>Tokenizer</code> output to generate candidates.
+            Each candidate stores neurovector telemetry within a given scope.</p>
+            <pre><code># Generate a candidate
+candidate = Candidate(
+    nv=neurovector,
+    knowledge=tokenizer.knowledge,
+    tot_hits=3,
+    max_hits=5,
+    tot_esti=10,
+    set_hits=tokenizer.find_nodes,
+    residues=set(),
+    unknown=set(),
+    var=my_var,
+    node=my_node,
+    scope=1
+)</code></pre>
+            <p><code>Candidate</code> attributes include total hits, certainty, errors (MAE, MSE), and more.</p>
+        </section>
+
+        <section>
+            <h3>Tokenization and Candidate Flow</h3>
+            <p>Typical steps:</p>
+            <ol>
+                <li><code>Tokenizer</code> analyzes the stimulus and selects relevant neurovectors.</li>
+                <li>For each defined <code>scope</code>, the engine generates a <code>Candidate</code>.</li>
+                <li><code>Candidate</code> stores scope details and prediction results.</li>
+            </ol>
+            <pre><code># Create and use a Tokenizer
+tokenizer = Tokenizer(dic_nodes=engine.nodes, stimulus=my_stimulus, vars=my_vars, scope=3)
+
+# Generate candidates
+candidates = []
+for neurovector, hits in tokenizer.count_neurovectors:
+    candidate = Candidate(
+        nv=engine.nvs[neurovector],
+        knowledge=tokenizer.knowledge,
+        tot_hits=hits,
+        max_hits=tokenizer.count_neurovectors[0][1],
+        tot_esti=tokenizer.total_stimulous,
+        set_hits=tokenizer.find_nodes,
+        residues=set(),
+        unknown=set(),
+        var=tokenizer.find_vars.get('column1'),
+        node=None,
+        scope=1
+    )
+    candidates.append(candidate)
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Metrics Calculated in <code>Candidate</code></h3>
+            <p><code>Candidate</code> automatically calculates:</p>
+            <ul>
+                <li><strong>Relative certainty (<code>certainty_rel</code>):</strong> Total hits relative to stimulus.</li>
+                <li><strong>Absolute certainty (<code>certainty_abs</code>):</strong> Max hits relative to stimulus.</li>
+                <li><strong>Errors:</strong> MAE and MSE.</li>
+                <li><strong>Energy:</strong> Weighted energy of involved nodes and vectors.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Result Visualization</h3>
+            <p>Use <code>show</code> to render scope information:</p>
+            <pre><code># Show candidate info
+for candidate in candidates:
+    candidate.show()</code></pre>
+            <p>Sample output:</p>
+            <pre><code>PREDICTION: column1 value1, Numeric: True, Empty: False
+----------------------------
+Certainty: 0.60, Hits: 3, Energy Nodes: 1.23, Energy Vectors: 2.45
+Prediction: value1-Success, MAE: 0.10, MSE: 0.01, MAE Nodes: 0.05, MAE Vectors: 0.07</code></pre>
+        </section>
+
+        <section>
+            <h3>Complete Flow</h3>
+            <p>End-to-end tokenization, propagation, and candidate generation:</p>
+            <pre><code># Create a Tokenizer
+tokenizer = Tokenizer(dic_nodes=engine.nodes, stimulus=my_stimulus, vars=my_vars, scope=5)
+
+# Generate candidates for prediction
+candidates = []
+for neurovector, hits in tokenizer.count_neurovectors:
+    candidate = Candidate(
+        nv=engine.nvs[neurovector],
+        knowledge=tokenizer.knowledge,
+        tot_hits=hits,
+        max_hits=tokenizer.count_neurovectors[0][1],
+        tot_esti=tokenizer.total_stimulous,
+        set_hits=tokenizer.find_nodes,
+        residues=set(),
+        unknown=set(),
+        var=tokenizer.find_vars.get('column1'),
+        node=None,
+        scope=1
+    )
+    candidates.append(candidate)
+
+# Show all candidates
+for candidate in candidates:
+    candidate.show()</code></pre>
+        </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter5_advance_engie.html">◀ Previous</a>
+        |
+        <a href="chapter7_neurovector.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

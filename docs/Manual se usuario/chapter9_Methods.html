@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Anonymous" />
+  <meta name="title" content="Chapter 9: Candidate Calculation Methods" />
+  <title>Chapter 9: Candidate Calculation Methods</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 24px; background: #fafafa; color: #222; }
+    header { text-align: center; padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid #e0e0e0; }
+    h1 { margin: 0 0 6px; font-size: 28px; }
+    h2 { margin: 0 0 6px; font-size: 20px; color: #444; font-weight: normal; }
+    h3 { margin-top: 28px; color: #333; }
+    section { margin: 18px 0; }
+    code { background: #f4f4f4; padding: 0 4px; border-radius: 3px; }
+    pre { background: #1f2937; color: #e5e7eb; padding: 14px; overflow: auto; border-radius: 6px; }
+    table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    thead { background: #f3f4f6; }
+    .note { background: #fff7e6; border-left: 4px solid #ffa500; padding: 10px 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>User Manual</h1>
+    <h2>Neurovectors</h2>
+    <h3>Chapter 9: Candidate Calculation Methods</h3>
+  </header>
+
+  <main>
+    <section>
+      <h3>Introduction</h3>
+      <p>
+        This chapter explains how the abstract class <code>Cal_Method</code> serves as the base for
+        implementing different strategies to pick the best candidate neurovector during prediction.
+        Subclasses define custom logic to evaluate candidates and compute metrics.
+      </p>
+    </section>
+
+    <section>
+      <h3>Defining <code>Cal_Method</code></h3>
+      <p>
+        <code>Cal_Method</code> is an abstract base class offering a common structure for calculation
+        strategies. Its design enables evaluating and selecting the best candidate using metrics like total hits,
+        MAE, or success.
+      </p>
+      <pre><code># Abstract class definition (Python)
+from abc import ABC, abstractmethod
+from neurovectors.models.graph import Candidate
+
+class Cal_Method(ABC):
+    def __init__(self) -> None:
+        self.name: str = ""
+        self.max: Candidate | None = None
+
+    @abstractmethod
+    def evaluate_max(self, candidate: Candidate):
+        pass
+
+    # Optional helpers typically provided in concrete implementations:
+    # - reset(self, candidate: Candidate, scope: int = 1)
+    # - get_mae(self) -> tuple[bool, float]
+    # - get_success(self) -> bool
+</code></pre>
+    </section>
+
+    <section>
+      <h3><code>Cal_Method</code> Responsibilities</h3>
+      <ul>
+        <li><strong>Track max:</strong> Manage the currently selected candidate (<code>self.max</code>).</li>
+        <li><strong>Subclass API:</strong> Define abstract hooks like <code>evaluate_max</code>.</li>
+        <li><strong>Metrics:</strong> Provide helpers to compute MAE and success when relevant.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Key Methods</h3>
+      <ul>
+        <li><strong><code>evaluate_max(candidate)</code>:</strong> Decide if the given candidate is better than <code>self.max</code>.</li>
+        <li><strong><code>reset(candidate, scope=1)</code>:</strong> Reset internal state pointing to a new current candidate.</li>
+        <li><strong><code>get_mae()</code>:</strong> Return MAE when the study variable is numeric.</li>
+        <li><strong><code>get_success()</code>:</strong> Return success for classification-style evaluation.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Subclass Example</h3>
+      <p>Example of a subclass implementing <code>evaluate_max</code> using total hits:</p>
+      <pre><code># Subclass implementing Cal_Method
+from neurovectors.models.graph import Candidate
+
+class HitsMethod(Cal_Method):
+    def __init__(self):
+        super().__init__()
+        self.name = "Hits"
+
+    def evaluate_max(self, candidate: Candidate):
+        if self.max is None or candidate.tot_hits &gt; self.max.tot_hits:
+            self.max = candidate
+</code></pre>
+    </section>
+
+    <section>
+      <h3>Advantages of Abstraction</h3>
+      <ul>
+        <li><strong>Extensible:</strong> Add new methods without changing core structures.</li>
+        <li><strong>DRY:</strong> Centralize common logic (MAE/success) and avoid duplication.</li>
+        <li><strong>Consistent:</strong> Provide a stable interface to integrate with Analytics.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Relationship with <code>Method</code></h3>
+      <p>
+        Each <code>Method</code> instance in Analytics uses a concrete <code>Cal_Method</code> strategy to
+        evaluate candidates inside a workspace.
+      </p>
+    </section>
+
+    <section>
+      <h3>Conclusion</h3>
+      <p>
+        <code>Cal_Method</code> provides a flexible foundation to build evaluation strategies that are easy to
+        extend and integrate across Neurovectors.
+      </p>
+    </section>
+
+    <section>
+      <h2>"Hits" Method</h2>
+      <p>
+        The <strong>Hits</strong> method selects the best candidate by maximizing total hits with the stimulus.
+        On ties, it uses the neurovector's energy as a tiebreaker. It is a concrete <code>Cal_Method</code>
+        implementation orchestrated by <code>Method</code> in Analytics.
+      </p>
+
+      <h3>Implementation</h3>
+      <pre><code>from neurovectors.models.graph import Candidate, Cal_Method
+
+class Hits(Cal_Method):
+    """Evaluate by number of neurovector hits within a scope"""
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Hits"
+
+    def evaluate_max(self, candidate: Candidate):
+        eval_hits = candidate.tot_hits - self.max.tot_hits
+        eval_energy = (candidate.neurovector.energy &gt; self.max.neurovector.energy)
+        if eval_hits &gt; 0 or (eval_hits == 0 and eval_energy):
+            self.max = candidate
+</code></pre>
+
+      <h3>Detailed Explanation</h3>
+      <ul>
+        <li><strong>Total Hits:</strong> If the candidate has more <code>tot_hits</code> than <code>self.max</code>, update the max.</li>
+        <li><strong>Energy Tiebreak:</strong> If hits are equal, choose the candidate with higher <code>neurovector.energy</code>.</li>
+      </ul>
+
+      <h3>Package Structure</h3>
+      <p>This class lives under <code>neurovectors/methods</code>:</p>
+      <pre><code>neurovectors/
+  └── methods/
+      ├── hits_method.py
+      └── ...
+</code></pre>
+
+      <h3>Relationship with Analytics</h3>
+      <p><code>Method</code> orchestrates <code>Hits</code> to analyze candidates. In Analytics, it can be selected
+        to evaluate accuracy and errors.</p>
+
+      <h3>Advantages</h3>
+      <ul>
+        <li><strong>Simplicity:</strong> Easy to understand and implement.</li>
+        <li><strong>Hit-based optimization:</strong> Prioritizes candidates with more coincidences.</li>
+        <li><strong>Tiebreaker:</strong> Uses neurovector energy on ties.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>"Avg_predict" Method</h2>
+      <p>
+        <strong>Avg_predict</strong> uses a weighted-average approach for regression and classification.
+        It handles both numeric and categorical variables and is often more robust than <code>Hits</code>.
+      </p>
+
+      <h3>Implementation</h3>
+      <pre><code>from neurovectors.models.graph import Candidate, Cal_Method
+
+class Avg_predict(Cal_Method):
+    """Evaluate by weighted mean of candidate predictions"""
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Avg_predict"
+        self.acc_value = 0    # Weighted values accumulator
+        self.acc_weight = 0   # Weights accumulator
+        self.avg_predict = None  # Final average prediction
+
+    def evaluate_max(self, candidate: Candidate):
+        if candidate.predict is not None and candidate.predict.numeric:
+            value = candidate.predict.value
+            weight = candidate.tot_hits
+            self.acc_value += value * weight
+            self.acc_weight += weight
+
+    def reset(self, candidate: Candidate, scope: int) -> None:
+        """Initialize accumulators with an initial weight to prioritize early candidates."""
+        super().reset(candidate=candidate)
+        self.avg_predict = None
+        self.acc_value = 0
+        self.acc_weight = 0
+        if candidate.predict is not None and candidate.predict.numeric:
+            weight = candidate.tot_hits * scope * 1.1
+            self.acc_value = candidate.predict.value * weight
+            self.acc_weight = weight
+            if self.acc_weight &gt; 0:
+                self.avg_predict = self.acc_value / self.acc_weight
+
+    def get_mae(self) -> tuple[bool, float, float | None]:
+        """Compute MAE considering the running average prediction."""
+        numeric = self.max.var.numeric
+        mae = None
+        self.avg_predict = None
+        if self.acc_weight &gt; 0:
+            self.avg_predict = self.acc_value / self.acc_weight
+
+        if numeric:
+            if self.avg_predict is not None:
+                mae = abs(self.avg_predict - self.max.var.value)
+            else:
+                mae = abs(self.max.var.value)
+        return numeric, mae, self.avg_predict
+
+    def get_success(self) -> bool | None:
+        """Evaluate success for classification using rounded average."""
+        success = None
+        if self.max.var.numeric:
+            if self.avg_predict is not None:
+                avg_predict = round(self.avg_predict, 0)
+                success = avg_predict == self.max.var.value
+            else:
+                success = False
+        return success
+</code></pre>
+
+      <h3>Why Initial Weighting Matters</h3>
+      <p>The <code>reset</code> method adjusts the initial weighting:</p>
+      <pre><code>weight = tot_hits * scope * 1.1</code></pre>
+      <p>
+        This prioritizes early candidates (often with more hits) in the average computation. Weighted mean:
+      </p>
+      <pre><code>avg_predict = (Σ(value * weight)) / Σ(weight)</code></pre>
+      <p>
+        Where <code>value</code> is the candidate's predicted value and <code>weight</code> reflects the
+        importance of the initial <code>scope</code>.
+      </p>
+
+      <h3>Advantages vs <code>Hits</code></h3>
+      <ul>
+        <li><strong>Lower MAE/RMSE:</strong> Weighted average reduces absolute and squared errors.</li>
+        <li><strong>Classification:</strong> Using <code>round(avg_predict, 0)</code> keeps high success rates.</li>
+        <li><strong>Versatility:</strong> Works for both categorical and numeric variables.</li>
+      </ul>
+
+      <h3>Comparative Example</h3>
+      <p>Consider three candidates:</p>
+      <table>
+        <thead>
+          <tr><th>Candidate</th><th>Predicted Value</th><th>Hits (<code>tot_hits</code>)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>5</td><td>10</td></tr>
+          <tr><td>2</td><td>7</td><td>5</td></tr>
+          <tr><td>3</td><td>6</td><td>2</td></tr>
+        </tbody>
+      </table>
+      <p>With <code>scope = 2</code>:</p>
+      <pre><code>avg_predict = (5*10*2.2 + 7*5 + 6*2) / (10*2.2 + 5 + 2)</code></pre>
+      <p>This yields a weighted prediction prioritizing candidate 1 while adjusting influence of others.</p>
+
+      <h3>Package Location</h3>
+      <p>Implemented under <code>neurovectors/methods</code>:</p>
+      <pre><code>neurovectors/
+  └── methods/
+      ├── avg_predict_method.py
+      ├── hits_method.py
+      └── ...
+</code></pre>
+    </section>
+
+    <section>
+      <h2>"Avg" Method</h2>
+      <p>
+        <strong>Avg</strong> implements a simple mean, a basic statistical baseline when candidate certainty is
+        low. Unlike <code>Hits</code> or <code>Avg_predict</code>, it does not weight by hits or energy,
+        distributing influence evenly across candidates within the scope.
+      </p>
+
+      <h3>Applications and Advantages</h3>
+      <ul>
+        <li><strong>Low certainty:</strong> Provides a robust statistical fallback.</li>
+        <li><strong>Compatibility:</strong> Complements method maps to switch dynamically by certainty.</li>
+        <li><strong>Regression and classification:</strong> Round the mean for classification scenarios.</li>
+      </ul>
+
+      <h3>Computation</h3>
+      <pre><code>avg_predict = (Σ(value)) / N</code></pre>
+      <p>Where <code>value</code> is each candidate's prediction and <code>N</code> is the number of candidates in
+        <code>scope</code>.</p>
+
+      <h3>Comparison with Other Methods</h3>
+      <p>
+        Compared to <code>Avg_predict</code> (weighted), <code>Avg</code> is simpler but less specific. With low
+        certainty, it may avoid overfitting caused by wrong weights.
+      </p>
+
+      <h3>Example</h3>
+      <table>
+        <thead>
+          <tr><th>Candidate</th><th>Predicted Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>5</td></tr>
+          <tr><td>2</td><td>7</td></tr>
+          <tr><td>3</td><td>6</td></tr>
+        </tbody>
+      </table>
+      <pre><code>avg_predict = (5 + 7 + 6) / 3 = 6</code></pre>
+
+      <h3>Integration with Method Map</h3>
+      <p><code>Avg</code> is part of <code>neurovectors/methods</code>, enabling dynamic selection by certainty:</p>
+      <ul>
+        <li>Certainty is below a threshold.</li>
+        <li>There are not enough candidates with significant hits.</li>
+      </ul>
+
+      <h3>Package Location</h3>
+      <pre><code>neurovectors/
+  └── methods/
+      ├── avg_method.py
+      ├── avg_predict_method.py
+      ├── hits_method.py
+      └── ...
+</code></pre>
+    </section>
+
+    <section>
+      <h2>Experimental Method: <code>Nodes_Energy</code></h2>
+      <p>
+        <code>Nodes_Energy</code> is experimental and selects candidates based on the accumulated energy of
+        impacted nodes. While not fully analyzed yet, it is promising where node energy is a reliable indicator of
+        candidate quality.
+      </p>
+
+      <h3>Method Philosophy</h3>
+      <p>
+        Focus on maximizing the sum of energies of impacted nodes (<code>sum_nodes</code>). Node energy reflects
+        relevance and contribution; prioritizing candidates with high-energy nodes can produce robust selections and
+        more precise predictions, especially with distributed patterns.
+      </p>
+    </section>
+
+    <section>
+      <h3>Other Methods (Overview)</h3>
+      <ul>
+        <li><strong>Vectors_Energy:</strong> Prioritizes candidates by neurovector energy composition and stability.</li>
+        <li><strong>Hybrid_Score:</strong> Combines multiple metrics (hits, energy, distance) into a single score.</li>
+        <li><strong>Super_X:</strong> Experimental ensemble of strategies driven by certainty thresholds.</li>
+      </ul>
+      <p class="note">
+        These methods live under <code>neurovectors/methods</code> and are loaded dynamically by Analytics.
+      </p>
+    </section>
+  </main>
+  <footer>
+    <p>
+      <a href="index.html">Index</a>
+      |
+      <a href="chapter8_Analytics.html">◀ Previous</a>
+      |
+      <a href="chapter10_reflexion.html">Next ▶</a>
+    </p>
+    <p>© 2025. Anonymized software. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="User Manual - Chapter 3">
+    <title>User Manual - Chapter 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+            background: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 10px 0;
+            padding: 0 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .important {
+            background: #ffecb3;
+            padding: 10px;
+            border-left: 5px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 3: Advanced Dataset Usage</h3>
+    </header>
+
+    <main>
+        <section>
+            <h3>Introduction</h3>
+            <p>
+                The <code>Dataset</code> class manages, analyzes, and processes large datasets efficiently.
+                This chapter details its core and helper methods, with practical examples.
+            </p>
+        </section>
+
+        <section>
+            <h3>Create a Dataset</h3>
+            <p>Instantiate the <code>Dataset</code> class:</p>
+            <pre><code>from neurovectors.models import Dataset
+
+# Create a new Dataset
+dataset = Dataset(verbose=True, file="data.csv", name="demo_dataset")</code></pre>
+        </section>
+
+        <section>
+            <h3>Main Methods</h3>
+            <h4>1. Load a CSV File</h4>
+            <p>Load a CSV file and prepare it:</p>
+            <pre><code># Load a CSV file
+dataset.load_csv(file_path="data.csv", chunk=100000, encoding="utf-8", separator=",")</code></pre>
+            <p>This method auto-detects file format and counts rows/columns.</p>
+        </section>
+
+        <section>
+            <h3>Helper Methods</h3>
+            <p>Helper methods detect and handle the incoming file format:</p>
+            <ul>
+                <li><strong>Detect SVMlight format:</strong></li>
+                <pre><code># Check if a file is in SVMlight format
+is_svmlight = CSVHandler.detect_svmlight_format("data.txt")
+print(f"Is SVMlight: {is_svmlight}")</code></pre>
+
+                <li><strong>Convert SVMlight to CSV:</strong></li>
+                <pre><code># Convert SVMlight file to CSV
+CSVHandler.svmlight_to_csv("data.svm", "data.csv", verbose=True)</code></pre>
+
+                <li><strong>Detect column separator:</strong></li>
+                <pre><code># Detect column separator
+separator = CSVHandler.detect_separator("data.csv")
+print(f"Detected separator: {separator}")</code></pre>
+
+                <li><strong>Detect header row:</strong></li>
+                <pre><code># Check if file has a header
+has_header = CSVHandler.has_header("data.csv")
+print(f"Has header: {has_header}")</code></pre>
+            </ul>
+            <p>These are useful when working with unknown file formats or when conversion is needed before processing.</p>
+        </section>
+
+        <section>
+            <h3>Study Variables</h3>
+            <p>Select which columns to use for analytics/training:</p>
+            <pre><code># Define study columns
+dataset.set_study(["column1", "column2"])</code></pre>
+            <p>Study variables are the columns used for training or analytics.</p>
+        </section>
+
+        <section>
+            <h3>Export and Process Dataset</h3>
+            <h4>1. Export Dataset</h4>
+            <p>Split dataset rows using a filter:</p>
+            <pre><code># Export rows using a filter
+dataset.export(filter_rows=sample_obj)</code></pre>
+
+            <h4>2. Process Dataset</h4>
+            <p>Apply a custom function to each row:</p>
+            <pre><code># Process rows with a custom function
+def my_func(index, row):
+    print(index, row)
+
+dataset.process(action=my_func, title="Processing Dataset")</code></pre>
+        </section>
+
+        <section>
+            <h3>Full Example</h3>
+            <pre><code>from neurovectors.models import Dataset, Sample
+
+# Create a new dataset
+dataset = Dataset(verbose=True, file="sales.csv", name="sales_2024")
+
+# Detect format and load dataset
+if CSVHandler.detect_svmlight_format("sales.svm"):
+    CSVHandler.svmlight_to_csv("sales.svm", "sales.csv", verbose=True)
+
+dataset.load_csv(file_path="sales.csv", chunk=50000)
+dataset.show_dataset()
+
+# Define study variables
+dataset.set_study(["product", "sales"])
+
+# Export dataset based on a filter
+sample_obj = Sample(name="train_sample", rows=[1, 2, 3])  # Create a filter
+dataset.export(filter_rows=sample_obj)
+
+# Process dataset
+def my_func(index, row):
+    print(f"Processing row {index}: {row}")
+
+dataset.process(action=my_func, title="Processing Dataset")</code></pre>
+        </section>
+
+        <section>
+            <h3>Additional Details</h3>
+            <p>
+                Helper methods automate detection of formats, separators, and headers, making dataset preparation easier.
+                Tools like <code>reset_df</code> ensure you can restore the dataset state at any time.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter2_introducction.html">◀ Previous</a>
+        |
+        <a href="chapter4_acctions.html">Next ▶</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+</body>
+</html>

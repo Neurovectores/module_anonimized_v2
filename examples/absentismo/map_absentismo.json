@@ -1,0 +1,49 @@
+{
+    "map": [
+        {
+            "Certeza (%)": 0,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 10,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 20,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 30,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 40,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 50,
+            "Mejor Metodo": "Avg_predict"
+        },
+        {
+            "Certeza (%)": 60,
+            "Mejor Metodo": "Hits"
+        },
+        {
+            "Certeza (%)": 70,
+            "Mejor Metodo": "Vectors_Energy"
+        },
+        {
+            "Certeza (%)": 80,
+            "Mejor Metodo": "Hits"
+        },
+        {
+            "Certeza (%)": 90,
+            "Mejor Metodo": "Vectors_Energy"
+        },
+        {
+            "Certeza (%)": 100,
+            "Mejor Metodo": "Hits"
+        }
+    ],
+    "var": "_Absenteeism time in hours"
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anonymous">
+    <meta name="title" content="Chapter 10 - Reflections">
+    <title>Chapter 10 - Reflections</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #003366;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .highlight {
+            background-color: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Manual</h1>
+        <h2>Neurovectors</h2>
+        <h3>Chapter 10: Reflections</h3>
+    </header>
+    <main>
+        <section>
+            <h2>Reflections</h2>
+            <p>
+                The neurovectors-based method offers compelling characteristics in speed and computational efficiency, especially compared to algorithms such as Random Forest or multilayer neural networks.
+                This chapter evaluates why it is a strong alternative and suggests directions to improve and extend its capabilities.
+            </p>
+        </section>
+        <section>
+            <h2>Clear Advantages of the Neurovectors Method</h2>
+            <p>Main advantages include:</p>
+            <ul>
+                <li>Fast execution using structures like <code>Counter</code> and dictionaries.</li>
+                <li>No specialized hardware required (no GPU); supports multithreading.</li>
+                <li>Flexible to add training layers, expanding capacity.</li>
+                <li>Dynamic adaptation via the method map.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Comparison with Traditional Methods</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Neurovectors</th>
+                        <th>Random Forest</th>
+                        <th>Multilayer Neural Network</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Execution Speed</td>
+                        <td>Very fast (dictionary-based)</td>
+                        <td>Fast, dataset-dependent</td>
+                        <td>Slow, especially on large datasets</td>
+                    </tr>
+                    <tr>
+                        <td>Hardware Requirements</td>
+                        <td>Low (no GPU)</td>
+                        <td>Low</td>
+                        <td>High (for GPU optimization)</td>
+                    </tr>
+                    <tr>
+                        <td>Multithread Scalability</td>
+                        <td>High (easy to parallelize)</td>
+                        <td>High (with specific tools)</td>
+                        <td>Medium (requires advanced frameworks)</td>
+                    </tr>
+                    <tr>
+                        <td>Model Flexibility</td>
+                        <td>High (adjustable method map)</td>
+                        <td>Medium</td>
+                        <td>High (highly configurable)</td>
+                    </tr>
+                    <tr>
+                        <td>Telemetry and Diagnostics</td>
+                        <td>Rich and detailed</td>
+                        <td>Medium (feature importance)</td>
+                        <td>Low, requires external techniques</td>
+                    </tr>
+                    <tr>
+                        <td>Accuracy (best case)</td>
+                        <td class="highlight">69.28%</td>
+                        <td>69,28%</td>
+                        <td>64.58%</td>
+                    </tr>
+                    <tr>
+                        <td>MAE y RMSE</td>
+                        <td>0.42 / 0.74</td>
+                        <td>0.36 / 0.69</td>
+                        <td>0.40 / 0.70</td>
+                    </tr>
+                    <tr>
+                        <td>Ease of Implementation</td>
+                        <td>High (simple structures)</td>
+                        <td>Medium (optimized trees required)</td>
+                        <td>Low (architecture design needed)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h2>Improvements and Future Work</h2>
+            <ul>
+                <li><strong>Formal multilayer training:</strong> Design additional layers to capture complex relationships.</li>
+                <li><strong>Hybrid combinations:</strong> Use neurovectors as a preprocessor before Random Forest or neural networks.</li>
+                <li><strong>Extend method map:</strong> Explore clustering- or PCA-based methods for adaptability.</li>
+                <li><strong>Computational optimization:</strong> Introduce efficient parallelization and validation on multicore systems.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Dataset Decomposition into Digits</h2>
+            <p>
+                Digit decomposition separates numeric variable values into their individual digits. This allows predictive models to analyze more granular patterns, potentially improving prediction accuracy.
+            </p>
+            <p>
+                A literature review found no direct references to digit decomposition applied to predictive systems. However, studies discuss decomposing predictions into simpler components to improve interpretability and accuracy. For example, Shah et al. (2024) introduce "component modeling," breaking down model predictions into architectural components (e.g., convolutional filters or attention heads). While focused on prediction decomposition rather than input data, it suggests that component-level decomposition can be beneficial in machine learning.
+            </p>
+            <p>
+                The following table compares the impact of digit decomposition on accuracy, MAE, and RMSE across several algorithms:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy (%)</th>
+                        <th>MAE</th>
+                        <th>RMSE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>68.34</td>
+                        <td>0.3417</td>
+                        <td>0.6260</td>
+                    </tr>
+                    <tr>
+                        <td>Neural Network</td>
+                        <td>63.95</td>
+                        <td>0.4013</td>
+                        <td>0.6993</td>
+                    </tr>
+                    <tr>
+                        <td>SVC</td>
+                        <td>60.19</td>
+                        <td>0.4357</td>
+                        <td>0.7148</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>63.01</td>
+                        <td>0.4169</td>
+                        <td>0.7192</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <strong>Comparison with decomposed and scaled dataset:</strong>
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy (%)</th>
+                        <th>MAE</th>
+                        <th>RMSE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>69.28</td>
+                        <td>0.3605</td>
+                        <td>0.6925</td>
+                    </tr>
+                    <tr>
+                        <td>Neural Network</td>
+                        <td>64.58</td>
+                        <td>0.4013</td>
+                        <td>0.7038</td>
+                    </tr>
+                    <tr>
+                        <td>SVC</td>
+                        <td>58.93</td>
+                        <td>0.4671</td>
+                        <td>0.7697</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>63.32</td>
+                        <td>0.3950</td>
+                        <td>0.6719</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Results indicate that digit decomposition followed by proper scaling can improve accuracy and other performance indicators in certain models. It helps models capture more detailed patterns, improving predictive power.
+            </p>
+        </section>
+        <section>
+            <h2>RMSE Increase After Digit Decomposition</h2>
+            <p>
+                While overall accuracy can improve with digit decomposition, RMSE may increase in some cases. Reasons include:
+            </p>
+            <h3>1. Increased Variance</h3>
+            <p>
+                Decomposition introduces more components. Each digit contributes independently, increasing variance. While this improves global accuracy by capturing finer patterns, it can amplify errors for specific cases, raising RMSE.
+            </p>
+            <h3>2. Sensitivity to Large Errors</h3>
+            <p>
+                RMSE penalizes large errors more than MAE due to squaring. If a model makes significant mistakes on a small subset, RMSE increases disproportionately even if overall precision improves.
+            </p>
+            <h3>3. Global vs Fine-grained Precision Trade-off</h3>
+            <p>
+                Decomposition can improve correct predictions on "easier" cases while increasing error on harder ones. RMSE reflects the larger errors.
+            </p>
+            <h3>4. Treating Digits as Independent Variables</h3>
+            <p>
+                Splitting numbers into independent digits can mislead some models about relationships across digits, increasing large errors even if accuracy benefits from added patterns.
+            </p>
+            <h3>5. Model-Specific Impact</h3>
+            <p>
+                The following table shows model-wise RMSE impact:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy (%)</th>
+                        <th>RMSE (no decomposition)</th>
+                        <th>RMSE (with decomposition)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>69.28</td>
+                        <td>0.6260</td>
+                        <td>0.6925</td>
+                    </tr>
+                    <tr>
+                        <td>Neural Network</td>
+                        <td>64.58</td>
+                        <td>0.6993</td>
+                        <td>0.7038</td>
+                    </tr>
+                    <tr>
+                        <td>SVC</td>
+                        <td>58.93</td>
+                        <td>0.7148</td>
+                        <td>0.7697</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>63.32</td>
+                        <td>0.7192</td>
+                        <td>0.6719</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>6. Future Research Directions</h3>
+            <p>To mitigate RMSE increase while maintaining accuracy improvements:</p>
+            <ul>
+                <li><strong>Error weighting:</strong> Adjust penalties for large errors to reduce RMSE impact.</li>
+                <li><strong>Scaling optimization:</strong> Improve scaling after decomposition to reduce variance.</li>
+                <li><strong>Multilayer training:</strong> Capture complex digit relationships (e.g., deep nets or hybrid systems).</li>
+                <li><strong>Difficult-case analysis:</strong> Identify and handle cases with highest errors.</li>
+            </ul>
+            <p>
+                In conclusion, digit decomposition is promising for improving overall accuracy, but requires additional adjustments to balance metrics like RMSE.
+            </p>
+        </section>
+                
+    </main>
+    <footer>
+      <p>
+        <a href="index.html">Index</a>
+        |
+        <a href="chapter9_Methods.html">◀ Previous</a>
+      </p>
+      <p>© 2025. Anonymized software. All rights reserved.</p>
+    </footer>
+ </body>
+ </html>

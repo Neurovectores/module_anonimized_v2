@@ -1,0 +1,19 @@
+name: nv_module_v2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - numpy>=1.21
+  - pandas>=1.5
+  - scikit-learn>=0.24
+  - tqdm>=4
+  - babel>=2.9
+  - psutil>=5.8
+  - tabulate>=0.8.9
+  - matplotlib>=3.4
+  - networkx>=2.6
+  - pyvis>=0.3.2
+  - pip:
+      - pandasgui>=0.2.12

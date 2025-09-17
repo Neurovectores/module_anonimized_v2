@@ -1,0 +1,49 @@
+{
+    "map": [
+        {
+            "Certeza (%)": 0,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 10,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 20,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 30,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 40,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 50,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 60,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 70,
+            "Mejor Metodo": "Super_X"
+        },
+        {
+            "Certeza (%)": 80,
+            "Mejor Metodo": "Nodes_Energy"
+        },
+        {
+            "Certeza (%)": 90,
+            "Mejor Metodo": "Avg"
+        },
+        {
+            "Certeza (%)": 100,
+            "Mejor Metodo": "Avg"
+        }
+    ],
+    "var": "_CLI_PERDIDO"
+}
